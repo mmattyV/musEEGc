@@ -90,7 +90,7 @@ class SpectroDataset(Dataset):
         return self.items[idx][1]
 
     def __len__(self):
-        return len(self.items) // 2 # Half the amount of data
+        return (len(self.items) // 2) # 1/2 the amount of data
     
     def __getitem__(self, idx):
         label = self.items[idx][1]

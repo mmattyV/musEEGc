@@ -30,12 +30,12 @@ logging.getLogger('mne').setLevel(logging.WARNING)
 num_sub = 20
 num_sess = 12
 cuda_device = 0
-train_dir = '../prepro_data/train'
-val_dir = '../prepro_data/val'
-train_behav_file = 'labels/train_behav.csv'
-val_behav_file = 'labels/val_behav.csv'
+train_dir = '../../prepro_data/train'
+val_dir = '../../prepro_data/val'
+train_behav_file = '../labels/train_behav.csv'
+val_behav_file = '../labels/val_behav.csv'
 base_lr = 0.0001
 decay_weight = 0.1 
 epoch_decay = 2 
-b_size = 5
+b_size = 3
 n_epochs = 5

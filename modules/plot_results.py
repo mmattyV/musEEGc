@@ -19,7 +19,7 @@ def plot_training_history(accuracies, losses, model):
     plt.ylabel('Loss')
     plt.legend()
 
-    plt.savefig(f'plots/{model}_loss_plot.png')
+    plt.savefig(f'../plots/{model}_loss_plot.png')
     plt.show()
 
 def plot_confusion_matrix(y_true, y_pred, model):
@@ -39,6 +39,6 @@ def plot_confusion_matrix(y_true, y_pred, model):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=label_names)
     disp.plot(cmap=plt.cm.Blues)
     plt.title(f'Confusion Matrix for {model}')
-    plt.savefig(f'plots/{model}_confusion_mat.png')
+    plt.savefig(f'../plots/{model}_confusion_mat.png')
     plt.show()
     
