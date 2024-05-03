@@ -22,6 +22,8 @@ import copy
 import pandas as pd
 from sklearn.decomposition import PCA
 import logging
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 logging.getLogger('mne').setLevel(logging.WARNING)
 
@@ -34,6 +36,6 @@ train_behav_file = 'labels/train_behav.csv'
 val_behav_file = 'labels/val_behav.csv'
 base_lr = 0.0001
 decay_weight = 0.1 
-epoch_decay = 5 
+epoch_decay = 2 
 b_size = 5
-n_epochs = 10
+n_epochs = 5

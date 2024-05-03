@@ -43,6 +43,8 @@ def train_model(model, criterion, optimizer, lr_scheduler, dset_loaders, dset_si
                 optimizer = lr_scheduler(optimizer, epoch)
                 model.train()  # Set model to training mode
             else:
+                val_preds = []
+                val_labels = []
                 model.eval()   # Set model to evaluate mode
 
             running_loss = 0.0
@@ -61,6 +63,11 @@ def train_model(model, criterion, optimizer, lr_scheduler, dset_loaders, dset_si
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     _, preds = torch.max(outputs, 1)
+
+                    if phase == 'val':
+                        val_labels.append(labels)
+                        val_preds.append(preds)
+
                     loss = criterion(outputs, labels)
 
                     # backward + optimize only if in training phase
@@ -85,6 +92,8 @@ def train_model(model, criterion, optimizer, lr_scheduler, dset_loaders, dset_si
 
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
+                best_val_labels = val_labels
+                best_val_preds = val_preds
                 best_acc = epoch_acc
                 best_model = copy.deepcopy(model)
                 print('New best accuracy = {:.4f}'.format(best_acc))
@@ -97,7 +106,7 @@ def train_model(model, criterion, optimizer, lr_scheduler, dset_loaders, dset_si
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     print('Best val Acc: {:.4f}'.format(best_acc))
 
-    return best_model, accuracies, losses
+    return best_model, accuracies, losses, best_val_preds, best_val_labels
 
 # Usage:
 # model, criterion, optimizer, and lr_scheduler need to be defined
