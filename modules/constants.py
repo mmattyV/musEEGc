@@ -37,5 +37,5 @@ val_behav_file = '../labels/val_behav.csv'
 base_lr = 0.0001
 decay_weight = 0.1 
 epoch_decay = 2 
-b_size = 3
-n_epochs = 5
+b_size = 5
+n_epochs = 1
