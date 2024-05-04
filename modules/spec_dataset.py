@@ -58,8 +58,8 @@ class SpectroDataset(Dataset):
                 data_path = os.path.join(self.data_dir, data_path)
                 full_data = mne.io.read_raw_fif(data_path, preload=False)
 
-                # Splitting full EEG recording into 5 second slices
-                num_intervals = (full_data.get_data().shape[1] // 3) // (84 * 5)
+                # Splitting full EEG recording into 1 second slices
+                num_intervals = (full_data.get_data().shape[1] // 3) // (84*5)
                 for i in range(num_intervals):
                     slice = [data_path, i*84, i*84+84]
                     
