@@ -38,6 +38,7 @@ class SpectroDataset(Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self.data_dict = {}
+        eeg_label_dict = {}
         self.class_counts = {}
 
         tags = ['HEHF', 'HELF', 'LEHF', 'LELF']
