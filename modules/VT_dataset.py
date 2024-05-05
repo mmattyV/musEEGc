@@ -1,14 +1,31 @@
-from modules.constants import *
+from modules.constants import *  # Assuming this contains necessary constants for the module.
 
 class RawDataset(Dataset):
+    """
+    A PyTorch Dataset class that processes raw EEG data files and associated behavioral scores.
+    It categorizes data based on combinations of enjoyment and familiarity ratings into four bins:
+    HEHF (High Enjoyment & High Familiarity),
+    HELF (High Enjoyment & Low Familiarity),
+    LEHF (Low Enjoyment & High Familiarity),
+    LELF (Low Enjoyment & Low Familiarity).
+    """
+
     # Bin and hot encode our labels for our targets
-    # Bins: [high familiarity & high enjoyment, 
-    #        high familiarity & low enjoyment, 
-    #        low familiarity & high enjoyment, 
+    # Bins: [high familiarity & high enjoyment,
+    #        high familiarity & low enjoyment,
+    #        low familiarity & high enjoyment,
     #        low familiarity & low enjoyment]
     # High is >= 2.5
     # Low is < 2.5
     def get_target(self, row):
+        """
+        Determine the target classification based on enjoyment and familiarity ratings.
+        Args:
+        - row: A row from the behavioral data file containing ratings.
+        
+        Returns:
+        - Tuple (target class index, target class string)
+        """
         # HEHF
         if row[2] >= 2.5 and row[3] >= 2.5:
             return 0, 'HEHF'
@@ -23,6 +40,14 @@ class RawDataset(Dataset):
             return 3, 'LELF'
         
     def __init__(self, data_dir, behav_file, transform=None, target_transform=None):
+        """
+        Initialize the dataset by loading and preprocessing the data.
+        Args:
+        - data_dir: Directory where EEG data files are stored.
+        - behav_file: File path for the CSV file containing behavioral data.
+        - transform: Optional transform to be applied on a sample.
+        - target_transform: Optional transform to be applied on the label.
+        """
         self.data_dir = data_dir
         self.behav_file = behav_file
         self.transform = transform
@@ -31,7 +56,6 @@ class RawDataset(Dataset):
 
         eeg_label_dict = {}
         self.class_counts = {}
-
         tags = ['HEHF', 'HELF', 'LEHF', 'LELF']
         
         for tag in tags:
@@ -42,7 +66,6 @@ class RawDataset(Dataset):
 
         total_files = 0
         for entry in os.listdir(self.data_dir):
-            # Join the directory path with the entry name to get full file path
             full_path = os.path.join(self.data_dir, entry)
             if os.path.isfile(full_path):
                 total_files += 1
@@ -79,6 +102,9 @@ class RawDataset(Dataset):
         print('Class counts: ', self.class_counts)
 
     def get_class_counts(self):
+        """
+        Returns a dictionary mapping class labels to their counts.
+        """
         enum_class_count = {}
         i = 0
         for _, count in self.class_counts.items():
@@ -87,12 +113,31 @@ class RawDataset(Dataset):
         return enum_class_count
     
     def get_label(self, idx):
+        """
+        Retrieve the label for a specific index.
+        Args:
+        - idx: Index for which to retrieve the label.
+        
+        Returns:
+        - Label corresponding to the index.
+        """
         return self.items[idx][1]
 
     def __len__(self):
-        return (len(self.items) // 2) # 1/2 the amount of data
+        """
+        Returns the number of items in the dataset.
+        """
+        return (len(self.items) // 2)  # 1/2 the amount of data
     
     def __getitem__(self, idx):
+        """
+        Retrieve a sample and its label from the dataset.
+        Args:
+        - idx: Index of the sample to retrieve.
+        
+        Returns:
+        - Tuple (EEG data, label)
+        """
         label = self.items[idx][1]
         eeg_index = self.data_dict[self.items[idx][0]]
 
