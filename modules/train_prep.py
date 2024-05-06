@@ -123,15 +123,15 @@ def train_model(model, criterion, optimizer, lr_scheduler, dset_loaders, dset_si
             # Calculate average loss and accuracy for the current phase.
             epoch_loss = running_loss / dset_sizes[phase]
             epoch_acc = running_corrects / dset_sizes[phase]
-            accuracies[phase].append(epoch_acc)
-            losses[phase].append(epoch_loss)
+            accuracies[phase].append(epoch_acc.cpu().numpy())  # Store accuracy.
+            losses[phase].append(epoch_loss)  # Store loss.
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
             # Check if the current model is the best model; if so, update the best model.
             if phase == 'val' and epoch_acc > best_acc:
-                best_val_labels = val_labels
-                best_val_preds = val_preds
+                best_val_labels = [label.cpu().numpy() for label in val_labels]
+                best_val_preds = [pred.cpu().numpy() for pred in val_preds]
                 best_acc = epoch_acc
                 best_model = copy.deepcopy(model)
                 print('New best accuracy = {:.4f}'.format(best_acc))

@@ -39,19 +39,13 @@ def plot_confusion_matrix(y_true, y_pred, model):
     - y_pred: List of tensors containing the predicted labels.
     - model: String, name of the model, used for naming the saved plot file.
     """
-    y_true = [y.cpu() for y in y_true]  # Move all elements of y_true to CPU if they are on GPU
-    y_pred = [y.cpu() for y in y_pred]  # Move all elements of y_pred to CPU if they are on GPU
-
-    # Flatten the list of tensors to create a single list of true labels and predicted labels
-    flattened_y_true = [item for tensor in y_true for item in tensor.tolist()]
-    flattened_y_pred = [item for tensor in y_pred for item in tensor.tolist()]
 
     # Get unique labels present in the data to label the confusion matrix
-    unique_labels = np.unique(np.concatenate((flattened_y_true, flattened_y_pred)))
+    unique_labels = np.unique(np.concatenate((y_true, y_pred)))
     label_names = [f"Class {label}" for label in unique_labels]  # Generate readable class names
 
     # Generate the confusion matrix
-    cm = confusion_matrix(flattened_y_true, flattened_y_pred, labels=unique_labels)
+    cm = confusion_matrix(y_true, y_pred, labels=unique_labels)
 
     # Plotting the confusion matrix using Matplotlib and sklearn's ConfusionMatrixDisplay
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=label_names)
