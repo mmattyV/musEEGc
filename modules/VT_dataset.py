@@ -63,12 +63,6 @@ class RawDataset(Dataset):
 
         df = pd.read_csv(self.behav_file)
         behav_data = df.values
-
-        total_files = 0
-        for entry in os.listdir(self.data_dir):
-            full_path = os.path.join(self.data_dir, entry)
-            if os.path.isfile(full_path):
-                total_files += 1
     
         progress_bar = tqdm(total=len(behav_data))
 
